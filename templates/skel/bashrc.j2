@@ -1,0 +1,92 @@
+#
+# vi: set sw=4 ts=4 ai:
+#
+# Ansible information:
+#     Filename : {{ template_path | regex_replace("/.*/ansible[^/]*/", ".../") }}
+#     Hostname : {{ template_host }}
+#     Rolename : {{ role_name }}
+#
+
+# Source global definitions
+if [ -f /etc/bashrc ]
+then
+  . /etc/bashrc
+fi
+
+{% raw -%}
+psa () {
+	if [ ${#} = 0 ]
+	then
+		ps -ef | less -r -E
+	else
+		ps -ef | awk 'NR == 1 { print } /'${*}'/ && ! /awk NR == 1/ { print }' | less -r -E
+	fi
+}
+
+l () {
+	LC_ALL=C LANG=C /bin/ls -lFh "${@}" | less -r -E
+}
+
+precmd() {
+	if [[ ( ${-} = *i* ) && ( $TERM == screen* ) ]]
+	then
+		curhost="$(hostname | cut -d '.' -f 1-2 | tr 'A-Z' 'a-z')"
+		printf "\ek${curhost}\e\\"
+	fi
+}
+{% endraw %}
+
+# History configuration
+## Append to history instead of overwriting
+shopt -s histappend
+## Amount of history to keep
+HISTFILESIZE=100000
+HISTSIZE=100000
+## Add a timestamp
+HISTTIMEFORMAT='%F %T '
+## Ignore certain things
+HISTCONTROL=ignoreboth
+HISTIGNORE='bg:fg:history'
+
+# Get rid of the 'RedHat' aliases. They annoy me
+unalias ls > /dev/null 2>&1
+unalias cp > /dev/null 2>&1
+unalias rm > /dev/null 2>&1
+unalias ln > /dev/null 2>&1
+
+# life savers (for me)
+alias less='less -r'
+alias more='/usr/bin/less'
+alias man='LC_ALL=C LANG=C /usr/bin/man'
+alias ls='LC_ALL=C LANG=C /bin/ls -lFh'
+alias vi="$(which vim)"
+alias v="LANG=C $(which vim)"
+alias s='sudo /bin/bash --login'
+
+# User specific environment and startup programs
+curenv="$(hostname | cut -d '.' -f 2   | tr 'A-Z' 'a-z')"
+curhst="$(hostname | cut -d '.' -f 1-2 | tr 'A-Z' 'a-z')"
+case ${curenv}
+in
+	prd) col='\e[93;101m'	;;
+	acc) col='\e[0;33m'		;;
+	rsc) col='\e[0;32m'		;;
+	dev) col='\e[0;32m'		;;
+	svc) col='\e[93;101m'	;;
+	*)   col='\e[0;31m'		;;
+esac
+
+export PATH=${PATH}:${HOME}/bin
+if [[ $(id -u) -eq 0 ]]
+then
+	export PS1="${curenv} [\u@${curhst} \W"'$(__git_ps1 " (%s)")]# '
+else
+	export PS1="${curenv} [\u@${curhst} \W"'$(__git_ps1 " (%s)")]\$ '
+fi
+
+export PROMPT_COMMAND=precmd
+export LESS='-eMFgXmqeisz-2XR -x4 -P%t?f%f :stdin .?pb%pb\%:?lbLine %lb:?bbByte %bb:-...'
+
+# -------------------------------------------------------------------
+# Copyright (c) 2012-today by {{ company }}
+# -------------------------------------------------------------------

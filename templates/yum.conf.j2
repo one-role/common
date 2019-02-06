@@ -1,0 +1,31 @@
+# vi: set sw=4 ts=4 ai:
+#
+# Ansible information:
+#     Filename : {{ template_path | regex_replace("/etc/ansible[^/]*", "...") }}
+#     Hostname : {{ template_host }}
+
+[main]
+cachedir=/var/cache/yum/$basearch/$releasever
+keepcache=1
+http_caching=all
+debuglevel=2
+logfile=/var/log/yum.log
+exactarch=1
+obsoletes=1
+gpgcheck=1
+plugins=1
+installonly_limit=3
+bugtracker_url=http://bugs.centos.org/set_project.php?project_id=16&ref=http://bugs.centos.org/bug_report_page.php?category=yum
+distroverpkg=centos-release
+
+{% if yum_exclude_packages is defined %}
+# Exclude packages because of pinned versions
+exclude={{ yum_exclude_packages | join(' ') }}
+{% endif %}
+
+# Use our own repository files
+reposdir=/etc/yum.repos.d/local
+
+# -------------------------------------------------------------------
+# Copyright (c) 2012-today by {{ company }}
+# -------------------------------------------------------------------

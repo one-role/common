@@ -1,0 +1,27 @@
+---
+- name: common:issue | ensure figlet software
+  package:
+    name: figlet
+    state: present
+
+- name: common:issue | figlet name
+  command: /usr/bin/figlet -c -w 80 {{ ansible_facts.hostname | lower() }}
+  register: figlethost
+  changed_when: False
+  check_mode: no
+
+- name: common:issue | deploy issue file
+  template:
+    src: issue.j2
+    dest: /etc/issue
+    owner: root
+    group: root
+    mode: 0444
+  changed_when: False
+
+- name: common:issue | deploy issue net file
+  file:
+    src: /etc/issue
+    dest: /etc/issue.net
+    state: link
+    force: True

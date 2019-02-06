@@ -1,0 +1,59 @@
+# vim:ff=unix ts=2 sw=2 ai expandtab ft=yaml:
+---
+
+- name: common:ssh | deploy ssh client configuration
+  template:
+    src: ssh_config.j2
+    dest: /etc/ssh/ssh_config
+    owner: root
+    group: root
+    mode: 0644
+
+- name: common:ssh | deploy ssh server configuration
+  template:
+    src: sshd_config.j2
+    dest: /etc/ssh/sshd_config
+    owner: root
+    group: root
+    mode: 0644
+    validate: '/sbin/sshd -t -f %s'
+  notify: restart_sshd
+
+- name: common:ssh | allow SSH traffic
+  firewalld:
+    service: ssh
+    state: enabled
+    permanent: True
+    immediate: True
+
+- name: common:ssh | start the ssh server
+  service:
+    name: sshd
+    state: started
+    enabled: True
+
+# ssh public keys
+- name: common:ssh | ensure ssh public keys
+  copy:
+    content: "{{ item.value }}"
+    dest: "/etc/ssh/ssh_host_{{ item.key }}_key.pub"
+    owner: root
+    group: root
+    mode: 0644
+  with_dict: "{{ sshpubkeys }}"
+  notify: restart_sshd
+  no_log: True
+  when: sshpubkeys is defined
+
+# ssh private keys
+- name: common:ssh | ensure ssh private keys
+  copy:
+    content: "{{ item.value }}"
+    dest: "/etc/ssh/ssh_host_{{ item.key }}_key"
+    owner: root
+    group: root
+    mode: 0400
+  with_dict: "{{ sshprivkeys }}"
+  notify: restart_sshd
+  no_log: True
+  when: sshprivkeys is defined

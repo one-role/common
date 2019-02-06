@@ -1,0 +1,110 @@
+# vim:ff=unix ts=2 sw=2 ai expandtab ft=yaml:
+---
+
+# Make sure the repositories are correct
+- import_tasks: repos.yml
+
+# Nice issue file
+- import_tasks: issue.yml
+
+# SSH configuration
+- import_tasks: ssh.yml
+
+# Network alias
+- import_tasks: ip_alias.yml
+
+# Extra packages
+- import_tasks: packages.yml
+
+# Put SELinux in permissive mode, logging actions that would be blocked.
+- name: common | disable selinux
+  selinux:
+    policy: targeted
+    state: permissive
+
+- name: common | deploy hosts file
+  template:
+    src: hosts.j2
+    dest: /etc/hosts
+    owner: root
+    group: root
+    mode: 0444
+
+- name: common | deploy system wide profile
+  template:
+    src: profile.j2
+    dest: /etc/profile
+    owner: root
+    group: root
+    mode: 0444
+
+- name: common | deploy timeout profile
+  template:
+    src: timeout.sh.j2
+    dest: /etc/profile.d/timeout.sh
+    owner: root
+    group: root
+    mode: 0444
+
+- name: common | deploy git-prompt profile
+  template:
+    src: git-prompt.sh.j2
+    dest: /etc/profile.d/git-prompt.sh
+    owner: root
+    group: root
+    mode: 0444
+
+- name: common | deploy selinux config
+  template:
+    src: selinux.j2
+    dest: /etc/selinux/config
+    owner: root
+    group: root
+    mode: 0444
+
+- name: common | deploy git config
+  copy:
+    src: gitconfig
+    dest: /etc/gitconfig
+    owner: root
+    group: root
+    mode: 0644
+
+- name: common | ensure skeleton directory
+  file:
+    path: /etc/skel/
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: common | deploy profile files to skeletons
+  template:
+    src: "{{ item }}"
+    dest: "/etc/skel/.{{ item | basename | regex_replace('.j2$', '') }}"
+    owner: root
+    group: root
+    mode: 0444
+  with_fileglob:
+    - "templates/skel/*.j2"
+
+- name: common | deploy profile files to root
+  template:
+    src: "{{ item }}"
+    dest: "/root/.{{ item | basename | regex_replace('.j2$', '') }}"
+    owner: root
+    group: root
+    mode: 0750
+  with_fileglob:
+    - "templates/skel/*.j2"
+
+- name: common | deploy logrotate config
+  template:
+    src: logrotate.conf.j2
+    dest: /etc/logrotate.conf
+    owner: root
+    group: root
+    mode: 0644
+    seuser: system_u
+    serole: object_r
+    setype: etc_t

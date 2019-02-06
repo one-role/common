@@ -1,0 +1,21 @@
+#
+# Ansible information:
+#     Filename : {{ template_path | regex_replace("/etc/ansible[^/]*", "...") }}
+#     Hostname : {{ template_host }}
+#     Rolename : {{ role_name }}
+#
+
+# Source global definitions
+if [ -f /etc/kshrc ]; then
+	. /etc/kshrc
+fi
+
+# use emacs editing mode by default
+set -o emacs
+
+# User specific aliases and functions
+
+
+# -------------------------------------------------------------------
+# Copyright (c) 2012-today by {{ company }}
+# -------------------------------------------------------------------

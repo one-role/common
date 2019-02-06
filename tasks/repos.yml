@@ -1,0 +1,45 @@
+# vim:ff=unix ts=2 sw=2 ai expandtab ft=yaml:
+---
+# Set yum configuration
+- name: common:repos | deploy yum config
+  template:
+    src: yum.conf.j2
+    dest: /etc/yum.conf
+    owner: root
+    group: root
+    mode: 0444
+
+- name: common:repos | ensure local repo directory
+  file:
+    path: /etc/yum.repos.d/local/
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: common:repos | deploy yum fastestmirror config
+  template:
+    src: fastestmirror.conf.j2
+    dest: /etc/yum/pluginconf.d/fastestmirror.conf
+    owner: root
+    group: root
+    mode: 0444
+
+- name: common:repos | deploy repository files
+  yum_repository:
+    reposdir: /etc/yum.repos.d/local
+    mode: 0644
+    name: "{{ item.name }}"
+    file: "{{ item.file }}"
+    baseurl: "{{ item.baseurl }}"
+    description: "{{ item.description }}"
+    enabled: "{{ item.enabled | default(0) }}"
+    gpgcheck: "{{ item.gpgcheck | default(0) }}"
+    gpgkey: "{{ item.gpgkey | default(omit) }}"
+    repo_gpgcheck: "{{ item.repo_gpgcheck | default(omit) }}"
+    sslverify: "{{ item.sslverify | default(omit) }}"
+    sslcacert: "{{ item.sslcacert | default(omit) }}"
+    metadata_expire: "{{ item.metadata_expire | default(omit) }}"
+  loop: "{{ yum_repositories }}"
+  notify: yum-clean-metadata
+

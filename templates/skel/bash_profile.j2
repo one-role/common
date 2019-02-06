@@ -1,0 +1,18 @@
+#
+# vi: set sw=4 ts=4 ai:
+#
+# Ansible information:
+#     Filename : {{ template_path | regex_replace("/.*/ansible[^/]*/", ".../") }}
+#     Hostname : {{ template_host }}
+#     Rolename : {{ role_name }}
+#
+
+# Get the aliases and functions
+if [ -f ~/.bashrc ]
+then
+	. ~/.bashrc
+fi
+
+# -------------------------------------------------------------------
+# Copyright (c) 2012-today by {{ company }}
+# -------------------------------------------------------------------

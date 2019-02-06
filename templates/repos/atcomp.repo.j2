@@ -1,0 +1,10 @@
+#
+# Ansible information:
+#     Filename : {{ template_path | regex_replace("/etc/ansible[^/]*", "...") }}
+#     Hostname : {{ template_host }}
+#
+#
+[atcomp]
+name=CentOS-$releasever - AT Computing
+baseurl=http://verdorie.nm.atcomputing.nl/centos/atcomp/$releasever
+gpgcheck=0

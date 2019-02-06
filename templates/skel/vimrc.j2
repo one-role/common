@@ -1,0 +1,65 @@
+"
+" vi: set sw=4 ts=4 ai:
+"
+" Ansible information:
+"     Filename : {{ template_path | regex_replace("/.*/ansible[^/]*/", ".../") }}
+"     Hostname : {{ template_host }}
+"     Rolename : {{ role_name }}
+"
+
+syntax on
+
+filetype plugin indent on
+
+set autoindent
+set background=dark
+set backspace=indent,eol,start
+set formatoptions+=1
+set hlsearch
+set ignorecase
+set incsearch
+set nobackup
+set nocompatible
+set noexpandtab
+set nofoldenable
+set noswapfile
+set nowritebackup
+set number
+set paste
+set ruler
+set showmatch
+set smartcase
+set smarttab
+set shiftwidth=4
+set softtabstop=4
+set tabstop=4
+
+if v:version >= 700
+	set numberwidth=4
+endif
+
+" Remove all whitespace at the end of the lines
+map <silent> <F10> :%s/\v\s+$//<bar>:let @/=\"\"<CR>
+
+" Highlighting whitespaces at end of line
+autocmd Filetype * highlight WhitespaceEOL ctermbg=blue guibg=blue
+autocmd Filetype * match WhitespaceEOL /\\s\\+$/
+
+" Special settings for Markdown
+augroup md
+	autocmd!
+
+	autocmd BufEnter *.md,*.mkd,*.pdc match ErrorMsg /\%>72v.\+/
+	autocmd BufEnter *.md,*.mkd,*.pdc set filetype=mkd
+	autocmd BufEnter *.md,*.mkd,*.pdc set nopaste
+	autocmd BufEnter *.md,*.mkd,*.pdc set digraph
+	autocmd BufEnter *.md,*.mkd,*.pdc set nohlsearch
+	autocmd BufEnter *.md,*.mkd,*.pdc set textwidth=72
+	autocmd BufEnter *.md,*.mkd,*.pdc set ts=4
+	autocmd BufEnter *.md,*.mkd,*.pdc set sw=4
+	autocmd BufEnter *.md,*.mkd,*.pdc set wrap
+	autocmd BufEnter *.md,*.mkd,*.pdc set list
+	autocmd BufEnter *.md,*.mkd,*.pdc set spell
+	autocmd BufEnter *.md,*.mkd,*.pdc set spelllang=en
+	autocmd BufEnter *.md,*.mkd,*.pdc map q gq}
+augroup END

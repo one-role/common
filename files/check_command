@@ -1,0 +1,36 @@
+#!/bin/bash
+# vi: set sw=4 ts=4 ai:
+
+case "${SSH_ORIGINAL_COMMAND}"
+in
+	*\&*)
+		echo "Rejected"
+		;;
+	*\(*)
+		echo "Rejected"
+		;;
+	*\{*)
+		echo "Rejected"
+		;;
+	*\;*)
+		echo "Rejected"
+		;;
+	*\<*)
+		echo "Rejected"
+		;;
+	*\`*)
+		echo "Rejected"
+		;;
+	*\|*)
+		echo "Rejected"
+		;;
+	/usr/local/bin/bckpup)
+		${SSH_ORIGINAL_COMMAND}
+		;;
+	rsync\ --server*)
+		${SSH_ORIGINAL_COMMAND}
+		;;
+	*)
+		echo "Rejected"
+		;;
+esac

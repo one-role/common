@@ -1,0 +1,17 @@
+#
+# Ansible information:
+#     Filename : {{ template_path | regex_replace("/etc/ansible[^/]*", "...") }}
+#     Hostname : {{ template_host }}
+#
+
+[epel]
+name=Extra Packages for Enterprise Linux 7 - $basearch
+baseurl=http://verdorie.nm.atcomputing.nl/centos/epel/7/$basearch
+failovermethod=priority
+enabled=1
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7
+
+# -------------------------------------------------------------------
+# Copyright (c) 2012-today by {{ company }}
+# -------------------------------------------------------------------

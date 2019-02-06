@@ -1,0 +1,21 @@
+;;
+;; Ansible information:
+;;     Filename : {{ template_path | regex_replace("/etc/ansible[^/]*", "...") }}
+;;     Hostname : {{ template_host }}
+;;     Rolename : {{ role_name }}
+;;
+
+(custom-set-variables
+ ;; uncomment to always end a file with a newline
+ ;'(require-final-newline t)
+ ;; uncomment to disable loading of "default.el" at startup
+ ;'(inhibit-default-init t)
+ ;; default to unified diffs
+ '(diff-switches "-u"))
+
+;;; uncomment for CJK utf-8 support for non-Asian users
+;; (require 'un-define)
+
+;; -------------------------------------------------------------------
+;; Copyright (c) 2012-today by {{ company }}
+;; -------------------------------------------------------------------

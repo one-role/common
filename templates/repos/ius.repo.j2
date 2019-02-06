@@ -1,0 +1,16 @@
+#
+# Ansible information:
+#     Filename : {{ template_path | regex_replace("/etc/ansible[^/]*", "...") }}
+#     Hostname : {{ template_host }}
+#
+
+[ius]
+name=IUS Community Packages for Enterprise Linux 7 - $basearch
+baseurl=http://verdorie.nm.atcomputing.nl/centos/ius
+failovermethod=priority
+enabled=1
+gpgcheck=0
+
+# -------------------------------------------------------------------
+# Copyright (c) 2012-today by {{ company }}
+# -------------------------------------------------------------------

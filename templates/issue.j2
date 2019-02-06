@@ -1,0 +1,19 @@
+{# Template for `/etc/issue` and `/etc/issue.net` #}
+{##}
+
+{{ "%78s"|format("Ansibleized") }}
+{{ figlethost.stdout }}
+  {{ "-" * 76 }}
+  {{ warning.center(76) }}
+  {{ noaccess.center(76) }}
+  {{ "-" * 76 }}
+    {{ "%-36s"|format(sysstr) }}{{ "%36s"|format(domstr) }}
+    {{ "%-36s"|format(manstr) }}{{ "%36s"|format(cmpstr) }}
+{% if location is defined %}
+    {{ "%-36s"|format(locstr) }}{{ "%36s"|format(grpstr) }}
+{% endif %}
+  {{ "-" * 76 }}
+{% if issueremarks is defined %}
+  {{ issueremarks.center(76) }}
+  {{ "-" * 76 }}
+{% endif %}

@@ -1,0 +1,16 @@
+#
+# Ansible information:
+#     Filename : {{ template_path | regex_replace("/etc/ansible[^/]*", "...") }}
+#     Hostname : {{ template_host }}
+#
+
+[elastic]
+name=Elastic Search Packages
+baseurl=http://verdorie.nm.atcomputing.nl/centos/elastic
+failovermethod=priority
+enabled=1
+gpgcheck=0
+
+# -------------------------------------------------------------------
+# Copyright (c) 2012-today by {{ company }}
+# -------------------------------------------------------------------

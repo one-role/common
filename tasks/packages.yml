@@ -1,0 +1,43 @@
+# vim:ff=unix ts=2 sw=2 ai expandtab ft=yaml:
+---
+- name: common:packages | install common packages
+  yum:
+    pkg: "{{ packages }}"
+    state: present
+
+
+- name: common:packages | install extra packages
+  yum:
+    pkg: "{{ extra_packages }}"
+    state: present
+  when: extra_packages is defined
+
+
+- name: common:packages | install extra pips
+  pip:
+    name: "{{ item }}"
+    state: present
+    use_mirrors: no
+    extra_args: --proxy {{ http_proxy }}
+  with_items: "{{ extra_pips }}"
+  when: extra_pips is defined
+
+
+- block:
+    - name: ensure local gem directory
+      file:
+        path: /usr/local/gem/
+        state: directory
+        owner: root
+        group: root
+        mode: 0755
+
+    - name: install extra gems
+      environment:
+        http_proxy: "{{ http_proxy }}"
+      gem:
+        name: "{{ item }}"
+        state: present
+        user_install: False
+      with_items: "{{ extra_gems }}"
+  when: extra_gems is defined

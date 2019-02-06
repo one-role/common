@@ -1,0 +1,16 @@
+---
+sysstr: "System name : {{ ansible_facts.hostname.lower() }}"
+manstr: "Managed by  : {{ name }}"
+domstr: "Domain : {{ domain.lower() }}"
+cmpstr: "Company : {{ company }}"
+locstr: "Location    : {{ location|default('Unknown') }}"
+grpstr: "Group : {{ group|default('Unknown') }}"
+warning: "-- W A R N I N G --"
+noaccess: "UNAUTHORIZED ACCESS STRICTLY PROHIBITED!!"
+
+# Default fallback timezone
+# Override with group_vars, etc.
+timezone: 'Europe/Amsterdam'
+
+# Define empty var so it's defined but doesn't do anything
+common_ipv4_alias_cidr: None

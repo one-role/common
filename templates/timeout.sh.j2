@@ -1,0 +1,20 @@
+# vi: set sw=4 ts=4 ai:
+#
+# Ansible information:
+#     Filename : {{ template_path | regex_replace("/etc/ansible[^/]*", "...") }}
+#     Hostname : {{ template_host }}
+
+
+# set TMOUT to 600 seconds to prevent that an user (root)
+# stays logged-in at a console
+
+if [[ "$(tty | cut -c6-8)" = "tty" ]]
+then
+	# On a real terminal and through the network
+	typeset -r TMOUT=600
+	export TMOUT
+fi
+
+# -------------------------------------------------------------------
+# Copyright (c) 2012-today by {{ company }}
+# -------------------------------------------------------------------
