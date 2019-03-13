@@ -7,10 +7,9 @@
   register: __common_ifcfg
   when: common_ipv4_alias_cidr | ipaddr('host/prefix')
   loop:
-    - { regexp: '^IPADDR1=', line: "IPADDR1={{ common_ipv4_alias_cidr | ipaddr('address') }}" }
-    - { regexp: '^PREFIX1=', line: "PREFIX1={{ common_ipv4_alias_cidr | ipaddr('prefix') }}"  }
+    - {regexp: '^IPADDR1=', line: "IPADDR1={{ common_ipv4_alias_cidr | ipaddr('address') }}"}
+    - {regexp: '^PREFIX1=', line: "PREFIX1={{ common_ipv4_alias_cidr | ipaddr('prefix') }}"}
 
 - name: Reconfigure interface {{ ansible_default_ipv4.interface }}
   command: 'bash -c "ifdown eth0 && ifup eth0"'
   when: __common_ifcfg.results.0.changed or __common_ifcfg.results.1.changed
-

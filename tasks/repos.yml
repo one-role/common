@@ -42,4 +42,3 @@
     metadata_expire: "{{ item.metadata_expire | default(omit) }}"
   loop: "{{ yum_repositories }}"
   notify: yum-clean-metadata
-
