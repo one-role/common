@@ -85,8 +85,7 @@
     owner: root
     group: root
     mode: 0444
-  with_fileglob:
-    - "templates/skel/*.j2"
+  loop: '{{ query("fileglob", "templates/skel/*.j2") }}'
 
 - name: common | deploy profile files to root
   template:
@@ -95,8 +94,7 @@
     owner: root
     group: root
     mode: 0750
-  with_fileglob:
-    - "templates/skel/*.j2"
+  loop: '{{ query("fileglob", "templates/skel/*.j2") }}'
 
 - name: common | deploy logrotate config
   template:
