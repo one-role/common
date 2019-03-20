@@ -19,7 +19,7 @@
     state: present
     use_mirrors: no
     extra_args: --proxy {{ http_proxy }}
-  with_items: "{{ extra_pips }}"
+  loop: "{{ extra_pips }}"
   when: extra_pips is defined
 
 
@@ -39,5 +39,5 @@
         name: "{{ item }}"
         state: present
         user_install: False
-      with_items: "{{ extra_gems }}"
+        loop: "{{ extra_gems }}"
   when: extra_gems is defined
