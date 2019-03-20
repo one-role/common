@@ -40,7 +40,7 @@
     owner: root
     group: root
     mode: 0644
-  with_dict: "{{ sshpubkeys }}"
+  loop: '{{ query("dict", sshpubkeys) }}'
   notify: restart_sshd
   no_log: True
   when: sshpubkeys is defined
@@ -53,7 +53,7 @@
     owner: root
     group: root
     mode: 0400
-  with_dict: "{{ sshprivkeys }}"
+  loop: '{{ query("dict", sshprivkeys) }}'
   notify: restart_sshd
   no_log: True
   when: sshprivkeys is defined
